@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+    <t t-name="database_sandbox.SandboxSystray" owl="1">
+
+        <!-- ENTER: Default [ 🧪 Sandbox ]  Hover: [ Enter Sandbox | 🧪 Enter ] -->
+        <div t-if="!session.is_sandbox" 
+             t-attf-class="o_sandbox_pill {{ state.isCloning ? 'o_sandbox_pill_cloning' : '' }}">
+            <span class="o_sandbox_pill_label">Enter Sandbox</span>
+            <span class="o_sandbox_pill_inner_btn" 
+                  t-on-click="startSandbox" 
+                  title="Enter Sandbox">
+                <i t-if="!state.isCloning" class="fa fa-flask"/>
+                <i t-if="state.isCloning" class="fa fa-circle-o-notch fa-spin"/>
+                <span class="o_sandbox_text_default">Sandbox</span>
+                <span class="o_sandbox_text_hover">Enter</span>
+            </span>
+        </div>
+
+        <!-- EXIT: Default [ ↪ Exit ]   Hover: [ Exit Sandbox | ↪ Exit ] -->
+        <div t-if="session.is_sandbox" class="o_sandbox_pill o_sandbox_pill_active">
+            <span class="o_sandbox_pill_label">Exit Sandbox</span>
+            <span class="o_sandbox_pill_inner_btn o_sandbox_exit_btn" t-on-click="stopSandbox" title="Exit Sandbox">
+                <i class="fa fa-sign-out"/>
+                <span class="o_sandbox_pill_text">Exit</span>
+            </span>
+        </div>
+
+    </t>
+</templates>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sandbox_environment_list" model="ir.ui.view">
+        <field name="name">sandbox.environment.list</field>
+        <field name="model">sandbox.environment</field>
+        <field name="arch" type="xml">
+            <list string="Sandbox Dashboard" create="false">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="create_date"/>
+                <field name="expiry_date" widget="remaining_days"/>
+                <field name="db_size"/>
+                <field name="remaining_entries"/>
+                <field name="state" widget="badge" decoration-success="state == 'active'" decoration-info="state == 'paused'" decoration-warning="state == 'cloning'" decoration-danger="state in ('failed', 'expired')"/>
+                <button name="action_resume" string="Resume Sandbox" type="object" icon="fa-play" invisible="state != 'paused' or remaining_entries &lt;= 0" class="btn btn-success"/>
+                <button name="action_kill" string="Kill Sandbox" type="object" icon="fa-trash" confirm="Are you sure you want to delete this sandbox? All data in it will be lost."/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sandbox_environment_form" model="ir.ui.view">
+        <field name="name">sandbox.environment.form</field>
+        <field name="model">sandbox.environment</field>
+        <field name="arch" type="xml">
+            <form string="Sandbox" create="false" edit="false">
+                <header>
+                    <button name="action_resume" string="Resume Sandbox" type="object" class="btn btn-success" invisible="state != 'paused' or remaining_entries &lt;= 0"/>
+                    <button name="action_kill" string="Kill Sandbox" type="object" class="btn btn-danger" confirm="Are you sure you want to delete this sandbox? All data in it will be lost."/>
+                    <field name="state" widget="statusbar" statusbar_visible="cloning,active,paused,expired"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="db_name"/>
+                        </group>
+                        <group>
+                            <field name="create_date"/>
+                            <field name="expiry_date"/>
+                            <field name="last_accessed"/>
+                            <field name="remaining_entries"/>
+                            <field name="db_size"/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sandbox_environment" model="ir.actions.act_window">
+        <field name="name">Sandbox Dashboard</field>
+        <field name="res_model">sandbox.environment</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Manage your active sandboxes here.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_sandbox_root" name="Database Sandboxes" parent="base.menu_administration" sequence="100" groups="base.group_system"/>
+    <menuitem id="menu_sandbox_dashboard" name="Dashboard" parent="menu_sandbox_root" action="action_sandbox_environment" sequence="10"/>
+
+    <!-- Add "Start Sandbox" button in settings or header -->
+    <record id="view_res_users_form_sandbox" model="ir.ui.view">
+        <field name="name">res.users.form.sandbox</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="%(action_sandbox_environment)d" string="Start Sandbox" type="action" class="btn btn-primary" groups="base.group_system" invisible="id != uid"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

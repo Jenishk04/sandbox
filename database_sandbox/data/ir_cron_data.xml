@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="cron_cleanup_expired_sandboxes" model="ir.cron">
+        <field name="name">Cleanup Expired Sandbox Environments</field>
+        <field name="model_id" ref="model_sandbox_environment"/>
+        <field name="state">code</field>
+        <field name="code">model.cron_cleanup_expired()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">hours</field>
+    </record>
+</odoo>

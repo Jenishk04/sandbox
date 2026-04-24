@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_sandbox" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.sandbox</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="20"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Sandbox" string="Database Sandbox" name="database_sandbox">
+                    <block title="Sandbox Settings">
+                        <setting title="Limits and Expiry">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="max_sandboxes" class="col-lg-3 o_light_label"/>
+                                    <field name="max_sandboxes"/>
+                                </div>
+                                <div class="row mt16">
+                                    <label for="expiry_hours" class="col-lg-3 o_light_label"/>
+                                    <field name="expiry_hours"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

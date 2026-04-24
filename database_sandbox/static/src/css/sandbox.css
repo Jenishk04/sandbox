@@ -1,0 +1,215 @@
+/* ================================================
+   Sandbox Environment Theming
+   ================================================ */
+
+/* --- Navbar: full red override in sandbox mode --- */
+body.o_sandbox_mode {
+    --o-navbar-bg: #dc3545;
+    --o-navbar-bg-hover: #bd2130;
+}
+
+body.o_sandbox_mode .o_main_navbar,
+body.o_sandbox_mode .o_main_navbar .o_menu_sections,
+body.o_sandbox_mode .o_main_navbar .o_menu_systray,
+body.o_sandbox_mode .o_main_navbar .o_menu_apps .dropdown-toggle,
+body.o_sandbox_mode .o_main_navbar .o_menu_brand,
+body.o_sandbox_mode .o_main_navbar .o_nav_entry:not(.o_sandbox_warning),
+body.o_sandbox_mode .o_main_navbar .o_nav_entry:not(.o_sandbox_warning) > a,
+body.o_sandbox_mode .o_main_navbar .o_nav_entry:not(.o_sandbox_warning) > button,
+body.o_sandbox_mode .o_main_navbar .o-dropdown,
+body.o_sandbox_mode .o_main_navbar .o-dropdown > a,
+body.o_sandbox_mode .o_main_navbar .o-dropdown > button {
+    background-color: #dc3545 !important;
+    background-image: none !important;
+}
+
+body.o_sandbox_mode .o_main_navbar .o_nav_entry:not(.o_sandbox_warning):hover,
+body.o_sandbox_mode .o_main_navbar .o_nav_entry:not(.o_sandbox_warning):hover > a,
+body.o_sandbox_mode .o_main_navbar .o_nav_entry:not(.o_sandbox_warning):hover > button,
+body.o_sandbox_mode .o_main_navbar .o-dropdown:hover,
+body.o_sandbox_mode .o_main_navbar .o-dropdown:hover > a,
+body.o_sandbox_mode .o_main_navbar .o-dropdown:hover > button {
+    background-color: #bd2130 !important;
+}
+
+body.o_sandbox_mode .o_main_navbar {
+    border-bottom: 2px solid #bd2130 !important;
+}
+
+body.o_sandbox_mode .o_main_navbar,
+body.o_sandbox_mode .o_main_navbar > a,
+body.o_sandbox_mode .o_main_navbar .o_menu_brand,
+body.o_sandbox_mode .o_main_navbar .o_menu_sections > *,
+body.o_sandbox_mode .o_main_navbar .o_menu_sections * {
+    color: white !important;
+}
+
+/* --- Faint diagonal watermark --- */
+body.o_sandbox_mode::before {
+    content: "SANDBOX ENVIRONMENT";
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    font-size: 8vw;
+    font-weight: 900;
+    color: rgba(220, 53, 69, 0.04);
+    z-index: 9999;
+    pointer-events: none;
+    white-space: nowrap;
+    user-select: none;
+}
+
+
+/* ================================================
+   SYSTRAY PILL
+   ─────────────────────────────────────────────
+   Default  → [ icon  Text ]         (one seamless pill)
+   On hover → [ Full Label | icon  Text ] (label slides in, inner pill appears)
+   ================================================ */
+
+/* Outer container — visual pill frame, NOT clickable */
+.o_sandbox_pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: default;
+
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    border-radius: 20px;
+    padding: 2px 3px 2px 3px;
+    background: rgba(0, 0, 0, 0.18);
+
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+/* ── Cloning state: fully disabled, no hover effects ── */
+.o_sandbox_pill_cloning {
+    pointer-events: none !important;  /* blocks all clicks and hovers */
+    opacity: 0.65;
+    cursor: not-allowed !important;
+}
+/* Prevent label from sliding in while cloning */
+.o_sandbox_pill_cloning .o_sandbox_pill_label {
+    max-width: 0 !important;
+    opacity: 0 !important;
+}
+/* Prevent inner btn from darkening while cloning */
+.o_sandbox_pill_cloning .o_sandbox_pill_inner_btn {
+    background: transparent !important;
+    border-color: transparent !important;
+}
+
+
+/* ── Label: hidden → slides in from left on outer pill hover ── */
+.o_sandbox_pill_label {
+    overflow: hidden;
+    max-width: 0;
+    opacity: 0;
+    padding: 0;
+    margin-right: 0;
+    pointer-events: none;
+    white-space: nowrap;
+
+    transition:
+        max-width    0.3s ease,
+        opacity      0.25s ease,
+        margin-right 0.3s ease,
+        padding      0.3s ease;
+}
+
+.o_sandbox_pill:hover .o_sandbox_pill_label {
+    max-width: 130px;
+    opacity: 1;
+    margin-right: 4px;
+    padding: 0 8px 0 6px;
+}
+
+
+/* ── Inner button — the ONLY clickable element ── */
+.o_sandbox_pill_inner_btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    cursor: pointer;
+
+    border-radius: 14px;
+    padding: 2px 8px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #fff;
+
+    /* Invisible by default — blends into outer pill */
+    background: transparent;
+    border: 1.5px solid transparent;
+
+    transition:
+        background   0.2s ease,
+        border-color 0.2s ease;
+}
+
+/* When outer pill is hovered → inner btn becomes a distinct dark chip with border */
+.o_sandbox_pill:hover .o_sandbox_pill_inner_btn {
+    background: rgba(0, 0, 0, 0.35);
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Hovering directly on the inner btn → even darker */
+.o_sandbox_pill_inner_btn:hover {
+    background: rgba(0, 0, 0, 0.55) !important;
+    border-color: rgba(255, 255, 255, 0.7) !important;
+}
+
+
+/* ── Text inside inner btn ── */
+
+/* "Sandbox" — visible by default, hidden on outer hover */
+.o_sandbox_text_default {
+    overflow: hidden;
+    max-width: 60px;
+    opacity: 1;
+    white-space: nowrap;
+    transition: max-width 0.25s ease, opacity 0.2s ease;
+}
+.o_sandbox_pill:hover .o_sandbox_text_default {
+    max-width: 0;
+    opacity: 0;
+}
+
+/* "Enter" — hidden by default, appears on outer hover */
+.o_sandbox_text_hover {
+    overflow: hidden;
+    max-width: 0;
+    opacity: 0;
+    white-space: nowrap;
+    transition: max-width 0.25s ease, opacity 0.2s ease;
+}
+.o_sandbox_pill:hover .o_sandbox_text_hover {
+    max-width: 50px;
+    opacity: 1;
+}
+
+/* "Exit" — always visible in both states */
+.o_sandbox_pill_text {
+    white-space: nowrap;
+}
+
+
+/* ── Exit pill: subtle glow pulse ── */
+.o_sandbox_pill_active {
+    animation: sandbox-glow-pulse 2.5s ease-in-out infinite;
+}
+.o_sandbox_pill_active:hover {
+    animation: none;
+}
+
+@keyframes sandbox-glow-pulse {
+    0%, 100% { box-shadow: 0 0 0px rgba(255, 255, 255, 0.1); }
+    50%       { box-shadow: 0 0 8px rgba(255, 255, 255, 0.4); }
+}
