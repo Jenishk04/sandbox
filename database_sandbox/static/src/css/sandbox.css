@@ -213,3 +213,36 @@ body.o_sandbox_mode::before {
     0%, 100% { box-shadow: 0 0 0px rgba(255, 255, 255, 0.1); }
     50%       { box-shadow: 0 0 8px rgba(255, 255, 255, 0.4); }
 }
+
+
+/* ================================================
+   HIDE SANDBOX DASHBOARD MENU WHEN IN SANDBOX
+   ─────────────────────────────────────────────
+   When inside a sandbox session (body.o_sandbox_mode), the sandbox
+   management menus are hidden in every location Odoo renders them:
+
+     1. Top navbar section items (Settings sidebar)
+     2. App-switcher sidebar (the apps list on the left)
+     3. Mobile/responsive dropdown menu
+
+   Odoo 19 stamps data-menu-xmlid on every rendered menu element,
+   so these selectors are precise and stable across Odoo updates.
+   ================================================ */
+
+/* 1. Navbar section link & button (Settings sidebar items) */
+body.o_sandbox_mode [data-menu-xmlid="database_sandbox.menu_sandbox_root"],
+body.o_sandbox_mode [data-menu-xmlid="database_sandbox.menu_sandbox_dashboard"] {
+    display: none !important;
+}
+
+/* 2. App-switcher sidebar (apps list) */
+body.o_sandbox_mode li[data-menu-xmlid="database_sandbox.menu_sandbox_root"],
+body.o_sandbox_mode li[data-menu-xmlid="database_sandbox.menu_sandbox_dashboard"] {
+    display: none !important;
+}
+
+/* 3. Any dropdown item bearing our xmlid (mobile / overflow menus) */
+body.o_sandbox_mode .dropdown-item[data-menu-xmlid="database_sandbox.menu_sandbox_root"],
+body.o_sandbox_mode .dropdown-item[data-menu-xmlid="database_sandbox.menu_sandbox_dashboard"] {
+    display: none !important;
+}

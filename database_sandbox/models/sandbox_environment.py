@@ -232,6 +232,19 @@ class SandboxEnvironment(models.Model):
                 record.db_size = 0.0
 
     @api.model
+    def _search(self, domain, offset=0, limit=None, order=None):
+        """Block sandbox dashboard access from within a sandbox session.
+
+        When the user is inside a sandbox, the sandbox.environment records they
+        see would be stale clones of the production records — showing the wrong
+        state, allowing navigation to other sandboxes, etc. We simply hide all
+        records so the dashboard appears empty and cannot be misused.
+        """
+        if _is_in_sandbox():
+            return super()._search([('id', '=', False)], offset, limit, order)
+        return super()._search(domain, offset, limit, order)
+
+    @api.model
     def create_sandbox(self):
         """Create a sandbox schema cloned from production."""
         production_db = self.env.cr.dbname
